@@ -72,6 +72,9 @@ public class SecurityConfig
                 http.csrf().ignoringAntMatchers("/h2-console/**");
                 http.csrf().ignoringAntMatchers("/api/**");
                 http.headers().frameOptions().sameOrigin();
+
+                // rest controller 사용
+                http.csrf().ignoringAntMatchers("/api/**");
         }
 
 }

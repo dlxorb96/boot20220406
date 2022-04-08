@@ -86,4 +86,13 @@ public interface MemberMapper {
         public MemberDTO memberEmail2(
                         @Param(value = "email") String email);
 
+        @Update({ "UPDATE MEMBER SET UPW= #{pw1} WHERE UEMAIL=#{uemail}" })
+        public int updatePw(@Param(value = "uemail") String uemail, @Param(value = "pw1") String pw);
+
+        @Update({ " UPDATE MEMBER SET UNAME= #{obj.uname}, UPHONE=#{obj.uphone}",
+                        " WHERE UEMAIL=#{uemail} " })
+        public int updateNamePhone(@Param(value = "uemail") String uemail, @Param(value = "obj") MemberDTO member);
+
+        @Update({ " UPDATE MEMBER SET UPW='BYE', UPHONE='', UNAME='' WHERE UEMAIL=#{uemail} " })
+        public int deleteMember(@Param(value = "uemail") String uemail);
 }

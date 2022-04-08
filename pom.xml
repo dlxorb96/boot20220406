@@ -20,6 +20,16 @@
 
 <!-- aop는 지금 빠졌다잉 -->
 
+		<!-- jwt -->
+		<dependency>
+			<groupId>javax.xml.bind</groupId>
+			<artifactId>jaxb-api</artifactId>
+		</dependency>
+		<dependency>
+		    <groupId>io.jsonwebtoken</groupId>
+		    <artifactId>jjwt</artifactId>
+		    <version>0.9.1</version>
+		</dependency>
 
 		<!-- security -->
 		<dependency>
