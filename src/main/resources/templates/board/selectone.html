@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>selectone.html</title>
+</head>
+<body>
+    <div style="padding: 10px;">
+        
+        <table border="1">
+            <tr>
+
+                <td>번호</td>
+                <td>제목</td>
+                <td>내용</td>
+                <td>작성자</td>
+                <td>조회수</td>
+                <td>등록일자</td>
+            </tr>
+                <td th:text="${tmp.no}"></td>
+        		<td th:text="${tmp.title}"></td>
+        		<td th:text="${tmp.content}"></td>
+        		<td th:text="${tmp.writer}"></td>
+        		<td th:text="${tmp.hit}"></td>
+        		<td th:text="${tmp.regdate}"></td>
+        	</tr> 
+            <button>수정</button>
+            <button>삭제</button>
+            <button>이전글</button><a th:href="@{/board/prev(no=${tmp.no})}">이전 글</a>
+            <button>다음글</button><a th:href="@{/board/next(no=${tmp.no})}">이전 글</a>
+        </table>
+        </form>
+
+    </div>
+</body>
+</html>

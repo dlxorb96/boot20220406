@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.example.dto.BoardDTO;
+import com.example.entity.BoardEntity;
 import com.example.mapper.BoardMapper;
+import com.example.repository.BoardRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,6 +26,27 @@ public class BoardRestController {
 
     @Value("${board.page.count}")
     int PAGECNT;
+
+    @Autowired
+    BoardRepository boardRepository;
+
+    @RequestMapping(value = "/updatehit1", method = { RequestMethod.PUT }, consumes = {
+            MediaType.ALL_VALUE }, produces = {
+                    MediaType.APPLICATION_JSON_VALUE })
+    public Map<String, Object> updateHit2Board(@RequestParam(name = "no") long no) {
+        Map<String, Object> map = new HashMap<>();
+        try {
+            BoardEntity board = boardRepository.findById(no).orElse(null);
+            board.setHit(board.getHit() + 1L);
+            boardRepository.save(board);
+            map.put("status", 200);
+
+        } catch (Exception e) {
+            map.put("status", 0);
+        }
+        return map;
+
+    }
 
     @RequestMapping(value = "/insert", method = { RequestMethod.POST }, consumes = { MediaType.ALL_VALUE }, produces = {
             MediaType.APPLICATION_JSON_VALUE })

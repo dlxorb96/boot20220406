@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>selectlist.html</title>
+</head>
+<body>
+    <div style="padding: 10px;">
+        <form th:action="@{/board/selectlist}" method="get">
+        <input type="text" name="txt">
+        <table border="1">
+            <tr>
+                <td>idx순서</td>
+                <td>번호</td>
+                <td>제목</td>
+                <td>내용</td>
+                <td>작성자</td>
+                <td>조회수</td>
+                <td>등록일자</td>
+            </tr>
+            <tr th:each="tmp, idx : ${list}">
+        		<td th:text="${idx.count}"></td>
+        		<td><a th:onclick="|javascript:updateHit('${tmp.no}')|" th:text="${tmp.no}"></a></td>
+        		<td th:text="${tmp.title}"></td>
+        		<td th:text="${tmp.content}"></td>
+        		<td th:text="${tmp.writer}"></td>
+        		<td th:text="${tmp.hit}"></td>
+        		<td th:text="${tmp.regdate}"></td>
+        	</tr> 
+        </table>
+        </form>
+
+        <th:block th:each="i : ${#numbers.sequence(1, pages)}">
+        	<a th:href="@{/board/selectlist(page=${i}, txt=${param.txt})}"
+        		th:text="${i}"></a>
+        </th:block>
+    </div>
+    <script>
+        function updateHit(no){
+    		// alert(no);  확인용
+    		// 1. 조회수 증가용 restful 호출 ex) axios
+			const xhr = new XMLHttpRequest(); // ex) axios와 같은것
+			const url = "/ROOT/api/board/updatehit1?no=" + no;
+			xhr.open("PUT", url, true);
+			xhr.responseType="json";
+			xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8;');
+			xhr.onload = function(e) {
+				console.log(e.target);
+				if(e.target.response.status === 200){
+		    		// 2. 다음 페이지로 이동
+		    		location.href="/ROOT/board/selectone?no=" + no;
+				}
+			}
+			xhr.send(); //호출해야 onload가 반응함.
+    	}
+    </script>
+</body>
+</html>

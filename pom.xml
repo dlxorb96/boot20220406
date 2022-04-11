@@ -20,6 +20,18 @@
 
 <!-- aop는 지금 빠졌다잉 -->
 
+		<!-- jpa -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>5.6.4.Final</version>
+		</dependency>
+
 		<!-- jwt -->
 		<dependency>
 			<groupId>javax.xml.bind</groupId>
