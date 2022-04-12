@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/board")
 public class BoardRestController {
+
     @Autowired
     BoardMapper bMapper;
 
@@ -100,6 +101,21 @@ public class BoardRestController {
         if (retboard != null) {
             map.put("status", 200);
             map.put("result", retboard);
+        }
+        return map;
+    }
+
+    @RequestMapping(value = "/next", method = { RequestMethod.GET }, consumes = {
+            MediaType.ALL_VALUE }, produces = {
+                    MediaType.APPLICATION_JSON_VALUE })
+    public Map<String, Object> next(@RequestParam long bno) {
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("status", 0);
+        BoardEntity board = boardRepository.findTop1ByNoGreaterThanOrderByNoAsc(bno);
+        if (board != null) {
+            map.put("status", 200);
+            map.put("result", board);
         }
         return map;
     }

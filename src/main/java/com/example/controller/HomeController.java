@@ -33,6 +33,13 @@ public class HomeController {
     @Autowired
     ItemMapper iMapper;
 
+    // 127.0.0.1:9090/ROOT/vue
+    @GetMapping(value = "/vue")
+    public String vueGet() {
+        // vue에서 build한 index.html파일의 위치
+        return "/vue/index";
+    }
+
     @GetMapping(value = { "/", "/home", "/main" })
     public String getHome(
             Model model,

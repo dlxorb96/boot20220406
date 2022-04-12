@@ -11,7 +11,6 @@
         
         <table border="1">
             <tr>
-
                 <td>번호</td>
                 <td>제목</td>
                 <td>내용</td>
@@ -25,13 +24,33 @@
         		<td th:text="${tmp.writer}"></td>
         		<td th:text="${tmp.hit}"></td>
         		<td th:text="${tmp.regdate}"></td>
-        	</tr> 
+        	</tr>
+            
             <button>수정</button>
             <button>삭제</button>
             <button>이전글</button><a th:href="@{/board/prev(no=${tmp.no})}">이전 글</a>
             <button>다음글</button><a th:href="@{/board/next(no=${tmp.no})}">이전 글</a>
         </table>
+        <hr />
+
+       
+
+        <form th:action="@{/board/insertreply(bno=${tmp.no})}" method="post">
+            <input type="text" name="board.no" th:value="${tmp.no}"/><br />
+        <textarea rows="10" name="content" placeholder="답글작성"></textarea><br />
+        <input type="text" name="writer" placeholder="작성자"><br />
+        <input type="submit"  placeholder="답글작성"><br />
         </form>
+        <hr />
+        <h3>답글목록</h3>
+        <table border="1">
+            <tr th:each="tmp : ${replist}">
+                <td th:text="${tmp.no}"></td> 
+                <td th:text="${tmp.content}"></td>
+                <td th:text="${tmp.writer}"></td> 
+                <td th:text="${tmp.regdate}"></td>
+            </tr>
+        </table>
 
     </div>
 </body>

@@ -3,6 +3,8 @@ package com.example.controller;
 import java.util.List;
 
 import com.example.entity.BoardEntity;
+import com.example.entity.BoardReplyEntity;
+import com.example.repository.BoardReplyRepository;
 import com.example.repository.BoardRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,9 @@ public class BoardController {
 
     @Value("${board.page.count}")
     int PAGECNT;
+
+    @Autowired
+    BoardReplyRepository brRepository;
 
     @GetMapping(value = "/insert")
     public String insertGet() {
@@ -63,6 +68,9 @@ public class BoardController {
         // BoardEntity board = boardRepository.findDistinctByNo(no);
         BoardEntity board = boardRepository.findById(no).orElse(null);
         // optional일 때 null일 경우 뒤에 orElse를 붙여 한번에 처리 가능
+
+        List<BoardReplyEntity> repList = brRepository.findByBoard_noOrderByNoDesc(board.getNo());
+        model.addAttribute("replist", repList);
         model.addAttribute("tmp", board);
         return "board/selectone";
     }
@@ -74,7 +82,7 @@ public class BoardController {
 
         BoardEntity board = boardRepository.findTop1ByNoLessThanOrderByNoDesc(no);
 
-        model.addAttribute("tmp", board);
+        // model.addAttribute("tmp", board);
         return "redirect:/board/selectone?no=" + board.getNo();
     }
 
@@ -83,8 +91,16 @@ public class BoardController {
             @RequestParam(name = "no") long no,
             Model model) {
         BoardEntity board = boardRepository.findTop1ByNoGreaterThanOrderByNoAsc(no);
-        model.addAttribute("tmp", board);
+        // model.addAttribute("tmp", board);
         return "redirect:/board/selectone?no=" + board.getNo();
     }
 
+    @PostMapping(value = "/insertreply")
+    public String insertReply(
+            @ModelAttribute BoardReplyEntity reply) {
+        System.out.println("여기---------------------" + reply.toString());
+        brRepository.save(reply);
+        return "redirect:/board/selectone?no="
+                + reply.getBoard().getNo();
+    }
 }
