@@ -1,11 +1,15 @@
 package com.example.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.example.dto.ItemDTO;
+import com.example.entity.BuyProjection;
 import com.example.mapper.ItemMapper;
+import com.example.repository.BuyRepository;
 
+import org.apache.ibatis.javassist.expr.NewArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ResourceLoader;
@@ -27,12 +31,17 @@ public class SellerController {
     @Autowired
     ResourceLoader resLoader;
 
+    @Autowired
+    BuyRepository buyRepository;
+    // JPA + HIBERNATE
+
     // int PAGECNT = 10;
     @Value("${board.page.count}")
     int PAGECNT;
 
     @Autowired
     ItemMapper iMapper;
+    // MyBatis
 
     @GetMapping(value = { "/", "/home" })
     public String getSellerHome(
@@ -55,6 +64,15 @@ public class SellerController {
                     user.getUsername(), txt);
             model.addAttribute("pages", (cnt - 1) / PAGECNT + 1);
 
+            // 주문내역
+            List<Long> list1 = new ArrayList();
+            for (ItemDTO tmp : list) {
+                list1.add(tmp.getIcode());
+            }
+            System.out.println(list1);
+            List<BuyProjection> buylist = buyRepository.findByItem_icodeIn(list1);
+            System.out.println(buylist.toString());
+            model.addAttribute("buylist", buylist);
             return "seller/home";
         }
         return "redirect:/member/login";

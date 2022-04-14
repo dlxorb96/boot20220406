@@ -13,6 +13,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -43,6 +45,7 @@ public class BoardReplyEntity {
     private Date regdate;
 
     @ToString.Exclude
+    @JsonBackReference
     @ManyToOne // 외래키 BOARD10테이블의 기본키 컬럼만..
     @JoinColumn(name = "BOARD")
     private BoardEntity board;

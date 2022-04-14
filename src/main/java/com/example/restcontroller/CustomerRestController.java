@@ -46,7 +46,6 @@ public class CustomerRestController {
         map.put("status", 0);
         System.out.println(pw1);
         String username = jwtUtil.extractUsername(token);
-        // syso
 
         UserDetails user = userDetailsServiceImpl.loadUserByUsername(username);
         BCryptPasswordEncoder bcpe = new BCryptPasswordEncoder();
@@ -133,17 +132,23 @@ public class CustomerRestController {
         System.out.println("HERERER" + member);
         Map<String, Object> map = new HashMap<>();
         map.put("status", 0);
+        try {
+            UserDetails user = userDetailsServiceImpl.loadUserByUsername(member.getUemail());
 
-        UserDetails user = userDetailsServiceImpl.loadUserByUsername(member.getUemail());
+            System.out.println("user확인용" + user.toString());
+            BCryptPasswordEncoder bcpe = new BCryptPasswordEncoder();
 
-        BCryptPasswordEncoder bcpe = new BCryptPasswordEncoder();
+            // 암호화 되지 않은 것과 암호화 된 것 비교하기
+            // 앞이 암호화되지 않은 것 뒤고 암호화된 것
+            if (bcpe.matches(member.getUpw(), user.getPassword())) {
+                String token = jwtUtil.generatorToken(member.getUemail());
+                map.put("token", token);
+                map.put("status", 200);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            map.put("status", -1);
 
-        // 암호화 되지 않은 것과 암호화 된 것 비교하기
-        // 앞이 암호화되지 않은 것 뒤고 암호화된 것
-        if (bcpe.matches(member.getUpw(), user.getPassword())) {
-            String token = jwtUtil.generatorToken(member.getUemail());
-            map.put("token", token);
-            map.put("status", 200);
         }
 
         return map;

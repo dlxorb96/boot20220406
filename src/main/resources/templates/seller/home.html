@@ -54,9 +54,80 @@
                 <a th:href="@{/seller/selectItem}">물품목록</a>
                 <a th:href="@{/seller/insertItem}">물품등록</a>
                 <a th:href="@{/seller/orderlist}">주문목록</a>
+                <hr />
+                <h3>주문내역</h3>
+                <table border="1">
+                    <tr>
+                        <th>주문번호</th>
+                        <th>주문수량</th>
+                        <th>주문일자</th>
+                        <th>물품이름</th>
+                        <th>주문자</th>
+                    </tr>
+                    <tr th:each="tmp : ${buylist}">
+                        <td th:text="${tmp.bno}"></td>
+                        <td th:text="${tmp.bcnt}"></td>
+                        <td th:text="${tmp.bregdate}"></td>
+                        <td th:text="${tmp.ItemIname}"></td>
+                        <td th:text="${tmp.MemberUname}"></td>
+                    </tr>
+                </table>
     </div>
 
-    <script>
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+
+
+	<script>
+		const state = {
+	        message : '',  // 보낼 메세지 
+	        client  : '' , // 접속한 클라이언트 객체
+	
+	        options : {
+	            clean : true, //세션 초기화
+	            reconnectPeriod : 20000, // 주기적인 접속 시간
+	
+	            // 고유값 ex)d200, d212 등
+	            clientId    : 'd202_'+ new Date().getTime(),
+	            username    : 'ds606', // 아이디
+	            password    : 'ds606', // 암호
+	        },
+	
+	        topic : 'ds/class606/#',
+	        qos   : 0,  // 0부터 2까지의 숫자
+	    };
+			
+		const url = 'ws://1.234.5.158:11884';
+        try {
+            state.client = mqtt.connect(url, state.options);
+            console.log(state.client);
+
+            state.client.on('connect', () => { 
+                console.log('connect success!!');
+            });
+
+            state.client.on('error', () => { 
+                console.log('connect error!!');
+            });
+
+            state.client.on('message',(topic, message) => {
+                console.log(topic, JSON.parse(message));
+                location.reload(); //F5을 누름
+            });
+            
+            state.client.subscribe(state.topic, {qos:state.qos}, (error, res) => {
+                if(error) {
+                    console.log('subscribe topic error', error);
+                    return;
+                }
+                console.log('subscribe success', res);
+            });
+        }
+        catch(e){
+            console.log('mqtt error', e);
+        }
+	
+        
+ 
         function handleUpdate(no){
             // GET으로 삭제처리 주소창을 바꿈
             location.href="/ROOT/seller/updateItem?code="+no
