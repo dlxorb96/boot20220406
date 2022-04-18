@@ -18,9 +18,12 @@
         	<input type="text" name="txt" placeholder="검색어" />
         	<input type="submit" value="검색" />
         </form>
-        
+        <form th:action="@{/seller/deleteupdatebatch}" method="get">
+            <input type="submit" name="btn" value="일괄수정">
+            <input type="submit" name="btn" value="일괄삭제">
         <table border="1">
         	<tr>
+                <th>체크</th>
         		<th>번호</th>
         		<th>물품코드</th>
         		<th>물품명</th>
@@ -29,6 +32,7 @@
         		<th>등록일</th>
         	</tr>		
         	<tr th:each="tmp, idx : ${list}">
+                <td><input type="checkbox" name="no" th:value="${tmp.icode}"></td>
         		<td th:text="${idx.count}"></td>
         		<td>
         			<a th:href="@{/seller/itemselectone(code=${tmp.icode})}"
@@ -44,6 +48,7 @@
                 </td>
         	</tr> 
         </table>
+        </form>
         
         <th:block th:each="i : ${#numbers.sequence(1, pages)}">
         	<a th:href="@{/seller/home(page=${i}, txt=${param.txt})}"
@@ -54,6 +59,7 @@
                 <a th:href="@{/seller/selectItem}">물품목록</a>
                 <a th:href="@{/seller/insertItem}">물품등록</a>
                 <a th:href="@{/seller/orderlist}">주문목록</a>
+                <a th:href="@{/seller/insertitembatch}">물품일괄목록</a>
                 <hr />
                 <h3>주문내역</h3>
                 <table border="1">

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>update</title>
+</head>
+<body>
+    <h3>상품상세페이지</h3>
+    <form th:action="upadteActionbatch" method="post" enctype="multipart/form-data">
+
+    <div th:each="item : ${list}">
+        <input type="hidden" th:value="${item.icode}" name="icode" />
+        상품명: <input th:value="${item.iname}" type="text" name="iname"><br />
+        상품설명:<input th:value="${item.icontent}" type="text" name="icontent" /><br />
+        가격:<input th:value="${item.iprice}" type="text" name="iprice" /><br />
+        재고수량:<input th:value="${item.iquantity}" type="text" name="iquantity" /><br />
+        <hr />
+    </div>    
+    <input type="submit" value="수정">
+    </form>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>물품일괄등록</title>
+</head>
+
+<body>
+    <div style="padding:20px">
+        <h3>물품일괄등록</h3>
+        <hr />
+
+        <form th:action="@{/seller/insertitembatch}" method="post" 
+        	enctype="multipart/form-data">
+        	<th:block th:each="i : ${#numbers.sequence(1,2)}">
+           	물품명 : <input type="text" name="iname" value="a"/><br />
+           	물품내용: <textarea rows="6" cols="" name="icontent">b</textarea><br />
+            가격 : <input type="text" name="iprice" value="12"/><br />
+            수량 : <input type="text" name="iquantity"  value="34"/><br />
+            대표이미지 : <input type="file" name="timage" /><br />
+            <hr />
+            </th:block>
+            
+            <input type="submit" value="물품일괄등록" />
+        </form>
+
+    </div>
+</body>
+</html>

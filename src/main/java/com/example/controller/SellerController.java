@@ -6,10 +6,12 @@ import java.util.List;
 
 import com.example.dto.ItemDTO;
 import com.example.entity.BuyProjection;
+import com.example.entity.ItemEntity;
+import com.example.entity.MemberEntity;
 import com.example.mapper.ItemMapper;
 import com.example.repository.BuyRepository;
+import com.example.service.ItemService;
 
-import org.apache.ibatis.javassist.expr.NewArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ResourceLoader;
@@ -35,6 +37,9 @@ public class SellerController {
     BuyRepository buyRepository;
     // JPA + HIBERNATE
 
+    @Autowired
+    ItemService iService;
+
     // int PAGECNT = 10;
     @Value("${board.page.count}")
     int PAGECNT;
@@ -43,6 +48,84 @@ public class SellerController {
     ItemMapper iMapper;
     // MyBatis
 
+    @GetMapping(value = "/deleteupdatebatch")
+    public String deleteUpdateBatchGet(
+            Model model,
+            @RequestParam(name = "btn") String btn,
+            @RequestParam(name = "no") Long[] no) {
+        if (btn.equals("일괄수정")) {
+            System.out.println(btn);
+            System.out.println(no[0]);
+            List<ItemEntity> list = iService.selectItemEntityIn(no);
+            System.out.println(list);
+            model.addAttribute("list", list);
+            return "seller/updatebatch";
+        }
+        if (btn.equals("일괄삭제")) {
+            iService.deletItemBatch(no);
+        }
+        return "redirect:/seller/home";
+    }
+
+    @PostMapping(value = "upadteActionbatch")
+    public String upadteAction(
+            @RequestParam(name = "icode") Long[] icode,
+            @RequestParam(name = "iname") String[] iname,
+            @RequestParam(name = "icontent") String[] icontent,
+            @RequestParam(name = "iprice") Long[] iprice,
+            @RequestParam(name = "iquantity") Long[] iquantity) {
+        List<ItemEntity> list = new ArrayList<>();
+        for (int i = 0; i < iname.length; i++) {
+            ItemEntity item = new ItemEntity();
+            item.setIcode(icode[i]);
+            item.setIname(iname[i]);
+            item.setIcontent(icontent[i]);
+            item.setIprice(iprice[i]);
+            item.setIquantity(iquantity[i]);
+
+            list.add(item);
+        }
+        iService.updateItemBatch(list);
+        return "redirect:/seller/home";
+    }
+
+    @GetMapping(value = "/insertitembatch")
+    public String insertgetString() {
+        return "/seller/insertBatch";
+    }
+
+    @PostMapping(value = "/insertitembatch")
+    public String insertPosT(
+            @AuthenticationPrincipal User user,
+            @RequestParam(name = "iname") String[] iname,
+            @RequestParam(name = "icontent") String[] icontent,
+            @RequestParam(name = "iprice") Long[] iprice,
+            @RequestParam(name = "iquantity") Long[] iquantity,
+            @RequestParam(name = "timage") MultipartFile[] iimage) throws IOException {
+
+        List<ItemEntity> list = new ArrayList<>();
+        for (int i = 0; i < iname.length; i++) {
+
+            ItemEntity item = new ItemEntity();
+            item.setIname(iname[i]);
+            item.setIcontent(icontent[i]);
+            item.setIprice(iprice[i]);
+            item.setIquantity(iquantity[i]);
+            item.setIimage(iimage[i].getBytes());
+            item.setIimagename(iimage[i].getOriginalFilename());
+            item.setIimagetype(iimage[i].getContentType());
+            item.setIimagesize(iimage[i].getSize());
+
+            MemberEntity member = new MemberEntity();
+            member.setUemail(user.getUsername());
+            item.setMember(member);
+            list.add(item);
+        }
+        iService.insertItemBatch(list);
+        return "redirect:/seller/home";
+
+    }
+
     @GetMapping(value = { "/", "/home" })
     public String getSellerHome(
             Model model,
@@ -50,7 +133,6 @@ public class SellerController {
             @RequestParam(name = "txt", defaultValue = "") String txt,
             @AuthenticationPrincipal User user) {
         if (user != null) {
-            System.out.println(user + "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
             // 목록
             List<ItemDTO> list = iMapper.selectItemList(
@@ -69,9 +151,7 @@ public class SellerController {
             for (ItemDTO tmp : list) {
                 list1.add(tmp.getIcode());
             }
-            System.out.println(list1);
             List<BuyProjection> buylist = buyRepository.findByItem_icodeIn(list1);
-            System.out.println(buylist.toString());
             model.addAttribute("buylist", buylist);
             return "seller/home";
         }

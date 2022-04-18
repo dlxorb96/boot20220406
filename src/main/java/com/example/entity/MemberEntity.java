@@ -7,6 +7,9 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
+
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -22,6 +25,8 @@ public class MemberEntity {
     private String uemail;
     // 암호
     @Column(nullable = false)
+    @JsonProperty(access = Access.WRITE_ONLY)
+    // 암호는 널로 처리 됨 불러올때
     private String upw;
     // 이름
     private String uname;
