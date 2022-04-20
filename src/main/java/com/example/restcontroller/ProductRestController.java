@@ -6,13 +6,15 @@ import java.util.List;
 import java.util.Map;
 
 import com.example.entity.ProductEntity;
+import com.example.entity.ProductViewEntity;
 import com.example.repository.ProductRepository;
+import com.example.repository.ProductViewRespository;
 import com.example.service.ProductService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
-
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,6 +37,9 @@ public class ProductRestController {
 
     @Autowired
     ProductService pService;
+
+    @Autowired
+    ProductViewRespository pViewRespository;
 
     @PostMapping(value = "/insert.json", consumes = { MediaType.ALL_VALUE }, produces = {
             MediaType.APPLICATION_JSON_VALUE })
@@ -141,6 +146,27 @@ public class ProductRestController {
             product1.setPrice(product.getPrice());
             pRepository.save(product1);
             map.put("status", 200);
+        }
+
+        catch (Exception e) {
+            e.printStackTrace();
+            map.put("status", -1);
+        }
+        return map;
+
+    }
+
+    // http://127.0.0.1:9090/ROOT/api/product/selectProductView.json?no=1001
+    @GetMapping(value = "/selectProductView.json", consumes = { MediaType.ALL_VALUE }, produces = {
+            MediaType.APPLICATION_JSON_VALUE })
+    public Map<String, Object> productSelect(
+            @RequestParam(name = "no") Long no) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("status", 0);
+        try {
+            ProductViewEntity proView = pViewRespository.findById(no).orElse(null);
+            map.put("status", 200);
+            map.put("result", proView);
         }
 
         catch (Exception e) {

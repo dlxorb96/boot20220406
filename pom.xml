@@ -20,6 +20,20 @@
 
 <!-- aop는 지금 빠졌다잉 -->
 
+		<!-- 컨트롤러에서 데이터 호출 가능하게 -->
+		<dependency>
+			<groupId>com.squareup.okhttp3</groupId>
+			<artifactId>okhttp</artifactId>
+		</dependency>
+
+		
+		<!-- https://mvnrepository.com/artifact/org.json/json -->
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20210307</version>
+		</dependency>
+
 		<!-- jpa -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -133,6 +147,8 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+
+	
 
 	<build>
 		<plugins>

@@ -22,7 +22,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 		"com.example.config",
 		"com.example.restcontroller",
 		"com.example.service",
-		"com.example.jwt"
+		"com.example.jwt",
+		"com.example.schedule"
 })
 
 // 매퍼
