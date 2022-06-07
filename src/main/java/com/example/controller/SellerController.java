@@ -147,7 +147,7 @@ public class SellerController {
             model.addAttribute("pages", (cnt - 1) / PAGECNT + 1);
 
             // 주문내역
-            List<Long> list1 = new ArrayList();
+            List<Long> list1 = new ArrayList<>();
             for (ItemDTO tmp : list) {
                 list1.add(tmp.getIcode());
             }

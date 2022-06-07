@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebFilter;
+// import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -13,8 +13,8 @@ import com.example.jwt.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-@WebFilter(urlPatterns = { "/api/customer/mypage" })
-// @Component
+// @WebFilter(urlPatterns = { "/api/customer/mypage" })
+
 public class JwtRequestFilter extends OncePerRequestFilter {
 
     @Autowired
